@@ -1,0 +1,142 @@
+/*=============================
+    General Styles
+=============================*/
+body {
+    background-color: #000;
+    color: #d1d5db;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+    min-height: 100vh;
+    font-family: 'Arial', sans-serif;
+}
+
+/*=============================
+    Typography
+=============================*/
+h1, h2, h3 {
+    color: #333;
+    font-weight: normal;
+    margin-bottom: 15px;
+}
+
+p {
+    margin-bottom: 15px;
+    font-size: 1rem;
+    line-height: 1.75;
+}
+
+/*=============================
+    Main Container and Layout
+=============================*/
+#scroll-container {
+    position: relative;
+    width: 100%;
+    max-width: 768px;
+    height: 100vh;
+    cursor: default;
+    overflow: hidden;
+}
+
+#conversations {
+    position: relative;
+    height: 100%;
+}
+
+/* Center Line */
+#scroll-container .center-line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, #374151, transparent);
+}
+
+/*=============================
+    Conversation Entries
+=============================*/
+
+/* Container for each conversation group */
+.conversation-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+    padding: 20px;
+    border: 1px solid #333;
+    border-radius: 8px;
+    background-color: #1a1a1a;
+}
+
+/* Individual conversation entries */
+.conversation-entry {
+    position: relative; /* Changed from absolute to relative */
+    display: block; /* Ensures entries stack vertically */
+    padding: 0 1rem;
+    margin-bottom: 10px;
+    opacity: 1;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Human-specific style */
+.conversation-entry.human {
+    color: #60a5fa; /* Blue for human */
+    font-weight: bold;
+}
+
+/* AI-specific style */
+.conversation-entry.ai {
+    color: #d1d5db; /* Gray for AI */
+    font-style: italic;
+}
+
+/* Hover Effect */
+.conversation-entry:hover {
+    background-color: rgba(31, 41, 55, 0.2);
+}
+
+/*=============================
+    Fixed Elements
+=============================*/
+.fixed {
+    position: fixed;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-family: 'Arial', sans-serif;
+}
+
+.fixed.top-8.left-8 {
+    top: 2rem;
+    left: 2rem;
+    font-size: 1.125rem;
+    color: #6b7280;
+}
+
+.fixed.top-8.right-8 { /* Updated to add share button to top-right */
+    top: 2rem;
+    right: 2rem;
+    font-size: 1.125rem;
+    color: #6b7280;
+}
+
+.fixed.bottom-8.right-8 {
+    bottom: 2rem;
+    right: 2rem;
+    font-size: 0.75rem;
+    color: #374151;
+}
+
+/*=============================
+    Vignette Overlay
+=============================*/
+.hidden-vignette {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(to bottom, black, transparent, black);
+    opacity: 0.5;
+    pointer-events: none;
+}

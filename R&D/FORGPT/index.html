@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Scroll - Reflective Conversations</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+    <!-- Main Scroll Wrapper -->
+    <div id="scroll-container" class="relative w-full max-w-2xl h-screen cursor-default overflow-hidden">
+        <!-- Center line for visual guidance -->
+        <div class="center-line"></div>
+        
+        <!-- Conversations Container: Dynamically populated with conversation entries -->
+        <section id="conversations" class="scroll-feed relative h-full"></section>
+    </div>
+
+    <!-- Fixed Elements for Branding and Instructions -->
+    <div class="fixed top-8 left-8 text-lg text-gray-500 tracking-widest">the scroll</div>
+    <div class="fixed bottom-8 right-8 text-xs text-gray-700 tracking-widest">hover to pause</div>
+
+    <!-- Subtle Vignette Overlay -->
+    <div class="fixed inset-0 bg-gradient-to-b from-black via-transparent to-black opacity-50 hidden-vignette"></div>
+
+    <!-- JavaScript for Dynamic Content and Interactions -->
+    <script>
+        // Fetch and render grouped conversations
+        async function loadConversations() {
+            try {
+                const response = await fetch('http://localhost:3000/api/conversations');  // Replace with your actual API endpoint
+                const groupedConversations = await response.json();
+                renderConversations(groupedConversations);
+            } catch (error) {
+                console.error("Error loading conversations:", error);
+            }
+        }
+
+        function renderConversations(groupedConversations) {
+            const container = document.getElementById('conversations');
+            container.innerHTML = ''; // Clear any existing content
+
+            // Iterate over each conversation group by conversationId
+            Object.keys(groupedConversations).forEach(conversationId => {
+                // Create a new div for each conversation group
+                const conversationGroup = document.createElement('div');
+                conversationGroup.classList.add('conversation-group');
+
+                groupedConversations[conversationId].forEach(entry => {
+                    // Create a div for each conversation entry
+                    const entryDiv = document.createElement('div');
+                    entryDiv.classList.add('conversation-entry', entry.sender === 'human' ? 'human' : 'ai');
+                    
+                    // Add the content as a paragraph element for better structure
+                    const contentParagraph = document.createElement('p');
+                    contentParagraph.textContent = entry.content;
+                    entryDiv.appendChild(contentParagraph);
+
+                    // Append the entry to the conversation group
+                    conversationGroup.appendChild(entryDiv);
+                });
+
+                // Append the conversation group to the main container
+                container.appendChild(conversationGroup);
+            });
+
+            console.log("Rendered conversations successfully.");
+        }
+
+        // Autoscroll settings
+        const scrollSpeed = 1; // Set this to control scroll speed (pixels per interval)
+        const scrollInterval = 50; // Interval in milliseconds for each scroll step
+
+        function startAutoscroll() {
+            const container = document.getElementById('scroll-container');
+            setInterval(() => {
+                container.scrollTop += scrollSpeed;
+                // Reset scroll to the top when reaching the end
+                if (container.scrollTop + container.clientHeight >= container.scrollHeight) {
+                    container.scrollTop = 0;
+                }
+            }, scrollInterval);
+        }
+
+        // Start autoscrolling when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            loadConversations(); // Load and render conversations
+            startAutoscroll();   // Begin autoscrolling
+        });
+    </script>
+</body>
+</html>

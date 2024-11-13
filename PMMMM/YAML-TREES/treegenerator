@@ -1,0 +1,62 @@
+import os
+try:
+    import yaml
+except ImportError:
+    print("PyYAML not installed. Please install it using 'pip install pyyaml'.")
+    exit(1)
+import json
+from datetime import datetime
+
+# Function to build the project workspace tree
+def build_project_tree(root_dir):
+    project_tree = {}
+    
+    # Recursive function to traverse the directory structure
+    def traverse_directory(directory, tree):
+        for item in os.listdir(directory):
+            item_path = os.path.join(directory, item)
+            if os.path.isdir(item_path):
+                # Add a new dictionary for each subdirectory
+                tree[item] = {}
+                traverse_directory(item_path, tree[item])
+            else:
+                # Add file to the current dictionary level
+                tree[item] = None
+    
+    # Start traversal from the root directory
+    traverse_directory(root_dir, project_tree)
+    return project_tree
+
+# Function to write the project tree to a YAML file
+def write_yaml_file(data, yaml_file_path):
+    with open(yaml_file_path, 'w') as yaml_file:
+        yaml.dump(data, yaml_file, default_flow_style=False, sort_keys=False)
+
+# Function to write the project tree to a JSON file with date and time tag
+def write_json_file(data, json_file_path):
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    json_file_with_timestamp = f"{json_file_path}_TareeeYa_{timestamp}.json"
+    with open(json_file_with_timestamp, 'w') as json_file:
+        json.dump(data, json_file, indent=4)
+
+# Main execution
+if __name__ == "__main__":
+    # Set the root directory for your project workspace
+    root_directory = r"C:\Users\VIVIM.inc\OneDrive\Documents\SCROLL\THESCROLL"  # Updated to your actual root directory
+    
+    # Build the project tree structure
+    project_structure = build_project_tree(root_directory)
+    
+    # Specify the path to save the YAML output
+    yaml_output_path = r"C:\Users\VIVIM.inc\OneDrive\Documents\SCROLL\THESCROLL\PMMMM\YAML-TREES\treegenerator.yaml"
+    
+    # Write the project tree structure to a YAML file
+    write_yaml_file(project_structure, yaml_output_path)
+    
+    # Specify the base path to save the JSON output
+    json_output_path = r"C:\Users\VIVIM.inc\OneDrive\Documents\SCROLL\THESCROLL\PMMMM\YAML-TREES\TareeeYa"
+    
+    # Write the project tree structure to a JSON file with date and time tag
+    write_json_file(project_structure, json_output_path)
+    
+    print(f"Project workspace structure saved to {yaml_output_path} and JSON with timestamp")
